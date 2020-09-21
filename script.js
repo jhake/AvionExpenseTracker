@@ -12,6 +12,50 @@ const submit = document.getElementById("submit")
 const incomeContainer = document.getElementById("incomeContainer")
 const expenseContainer = document.getElementById("expenseContainer")
 
+let entries = []
+
+window.onload = function() {
+    // Example entries, as if loaded from database
+    entries.push(new Entry("test income", 1000))
+    entries.push(new Entry("test expense", -400))
+    updateDisplays()
+}
+
+const Entry = function(description, amount) {
+    this.description = description
+    this.amount = amount
+
+    this.element = ( () => {
+        let newLi = document.createElement("li")
+        let descriptionElement = document.createElement("h3")
+        let amountElement = document.createElement("span")
+        let crossButton = document.createElement("span")
+        let percentElement = document.createElement("div")
+
+        amountElement.className = "amount"
+        crossButton.className = "cross-button"
+        percentElement.className = "percent"
+
+        descriptionElement.innerHTML = description
+        amountElement.innerHTML = (amount >= 0)? "+" : ""
+        amountElement.innerHTML += amount
+        crossButton.innerHTML = "X"
+        crossButton.onclick = removeItem
+
+        newLi.appendChild(descriptionElement)
+        newLi.appendChild(amountElement)
+        newLi.appendChild(crossButton)
+        newLi.appendChild(percentElement)
+        
+        newLi.entry = this
+
+        let parent = (amount >= 0)? incomeContainer : expenseContainer
+        parent.appendChild(newLi)
+
+        return newLi
+    } ) ();
+}
+
 submit.onclick = function() {
     let values = getInput()
     clearInput()
@@ -22,9 +66,13 @@ submit.onclick = function() {
 const getInput = function() {
     let values = {}
 
-    values["select"] = inputSelect.value
     values["description"] = inputDescription.value
-    values["amount"] = inputAmount.value
+    
+    if (inputSelect.value === "+") {
+        values["amount"] = Number(inputAmount.value)
+    } else {
+        values["amount"] = -Number(inputAmount.value)
+    }
 
     return values
 }
@@ -35,59 +83,49 @@ const clearInput = function() {
 }
 
 const addEntry = function(values) {
-    let container = (values["select"] === "+")? incomeContainer : expenseContainer
-    let ul = container.querySelector("ul")
-
-    let newLi = document.createElement("li")
-    let description = document.createElement("h3")
-    let amount = document.createElement("span")
-    let crossButton = document.createElement("span")
-    let percent = document.createElement("div")
-
-    amount.className = "amount"
-    crossButton.className = "cross-button"
-    percent.className = "percent"
-
-    description.innerHTML = values["description"]
-    amount.innerHTML = (values["select"] === "+")? "+" : "-"
-    amount.innerHTML += values["amount"]
-    crossButton.innerHTML = "X"
-    crossButton.onclick = removeItem
-
-    newLi.appendChild(description)
-    newLi.appendChild(amount)
-    newLi.appendChild(crossButton)
-    newLi.appendChild(percent)
-    ul.appendChild(newLi)
+    let newEntry = new Entry(values.description, values.amount)
+    entries.push(newEntry)
 }
 
 const updateDisplays = function() {
     let totalIncome = 0
     let totalExpense = 0
 
-    for(let li of incomeContainer.querySelector("ul").children) {
-        totalIncome += Number(li.querySelector(".amount").innerHTML)
-    }
-
-    for(let li of expenseContainer.querySelector("ul").children) {
-        totalExpense += Number(li.querySelector(".amount").innerHTML)
-    }
+    entries.forEach( entry => {
+        if (entry.amount >= 0) {
+            totalIncome += entry.amount
+        } else {
+            totalExpense += entry.amount
+        }
+    })
 
     incomeDisplay.querySelector("span").innerHTML = totalIncome
     expenseDisplay.querySelector("span").innerHTML = totalExpense
 
     totalBudget.innerHTML = totalIncome + totalExpense
 
-    for(let li of expenseContainer.querySelector("ul").children) {
-        updatePercent.call(li)
-    }
+    entries.forEach( entry => {
+        if (entry.amount < 0) {
+            updatePercent.call(entry.element)
+        }
+    })
 
     expenseDisplay.querySelector(".percent").innerHTML = (totalExpense/totalIncome) * -100
     expenseDisplay.querySelector(".percent").innerHTML += "%"
+
+    console.log(entries)
 }
 
 const removeItem = function() {
+    let entry = this.parentElement.entry
     this.parentElement.remove()
+
+    // delete the entry from entries
+    const index = entries.indexOf(entry);
+    if (index > -1) {
+        entries.splice(index, 1);
+    }
+
     updateDisplays()
 }
 
