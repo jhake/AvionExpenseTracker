@@ -46,7 +46,7 @@ const Entry = function(description, amount) {
             descriptionElement.innerHTML += "..."
         }
         amountElement.innerHTML = (amount >= 0)? "+" : ""
-        amountElement.innerHTML += (formatter.format(amount))
+        amountElement.innerHTML += (moneyFormatter(amount))
         crossButton.innerHTML = "×"
         crossButton.onclick = removeItem
 
@@ -121,15 +121,15 @@ const updateDisplays = function() {
     let totalExpense = getTotalExpense()
     let totalBudget = totalIncome + totalExpense
 
-    incomeDisplay.querySelector("span").innerHTML = "+" + formatter.format(totalIncome)
-    expenseDisplay.querySelector("span").innerHTML = formatter.format(totalExpense)
+    incomeDisplay.querySelector("span").innerHTML = "+" + moneyFormatter(totalIncome)
+    expenseDisplay.querySelector("span").innerHTML = moneyFormatter(totalExpense)
 
     if(totalBudget >= 0) {
         totalDisplay.innerHTML = "+"
     } else {
         totalDisplay.innerHTML = ""
     }
-    totalDisplay.innerHTML += formatter.format(totalBudget)
+    totalDisplay.innerHTML += moneyFormatter(totalBudget)
 
     entries.forEach( entry => {
         if (entry.amount < 0) {
@@ -193,10 +193,10 @@ const onmouseleaveHandler = function() {
     crossButton.classList.remove("displayed")
 }
 
-var formatter = new Intl.NumberFormat('en-US', {
+var moneyFormatter = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-})
+}).format
 
 const percentFormatter = function(value) {
     if(value == Infinity || value == -Infinity || isNaN(value)) {
