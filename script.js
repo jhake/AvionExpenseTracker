@@ -84,6 +84,12 @@ inputSelect.onchange = function() {
     }
 }
 
+inputAmount.oninput = function() {
+    if(this.value < 0) {
+        this.value = Math.abs(this.value)
+    }
+}
+
 const getInput = function() {
     let values = {}
 
