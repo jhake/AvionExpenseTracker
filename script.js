@@ -69,7 +69,7 @@ const Entry = function(description, amount) {
     } ) ();
 }
 
-submit.onclick = function() {
+inputForm.onsubmit = function() {
     let values = getInput()
     clearInput()
     addEntry(values)
@@ -85,8 +85,10 @@ inputSelect.onchange = function() {
 }
 
 inputAmount.oninput = function() {
-    if(this.value < 0) {
-        this.value = Math.abs(this.value)
+    if (this.value <= 0) {
+        this.setCustomValidity('The number must be greater than zero.');
+    } else {
+        this.setCustomValidity('');
     }
 }
 
