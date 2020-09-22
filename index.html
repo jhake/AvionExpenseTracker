@@ -10,10 +10,10 @@
     <header>
         <div class="container">
             <h2>Available Budget in September 2020:</h2>
-            <h1 id="totalBudget">0</h1>
+            <h1 id="totalDisplay">0</h1>
             <div id="incomeDisplay">
                 <h3>
-                    Income
+                    INCOME
                 </h3>
                 <span class="amount">
                     0
@@ -21,13 +21,15 @@
             </div>
             <div id="expenseDisplay">
                 <h3>
-                    Expenses
+                    EXPENSES
                 </h3>
                 <span class="amount">
                     0
                 </span>
-                <div class="percent">
-                    10%
+                <div class="percent-container">
+                    <div class="percent">
+                        10%
+                    </div>
                 </div>
             </div>
         </div>
@@ -35,14 +37,16 @@
 
     <section id="input">
         <div class="container">
-            <form id="inputForm" action="javascript:void(0);">
+            <form id="inputForm" class="input-plus" action="javascript:void(0);">
                 <select id="inputSelect">
                     <option value="+">+</option>
                     <option value="-">-</option>
                 </select>
                 <input type="text" id="inputDescription" placeholder="Add Description">
                 <input type="number" id="inputAmount" placeholder="Amount">
-                <button id="submit">Submit</button>
+                <button id="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
+                </button>
             </form>
         </div>
     </section>
@@ -50,9 +54,9 @@
     <section id="expenseIncome">
         <div class="container">
             <div id="incomeContainer">
-                <h2>Income</h2>
+                <h2>INCOME</h2>
                 <ul>
-                    <li>
+                    <!-- <li>
                         <h3>
                             Paycheck
                         </h3>
@@ -62,13 +66,13 @@
                         <span class="cross-button">
                             X
                         </span>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <div id="expenseContainer">
-                <h2>Expenses</h2>
+                <h2>EXPENSES</h2>
                 <ul>
-                    <li>
+                    <!-- <li>
                         <h3>
                             Rent
                         </h3>
@@ -81,7 +85,7 @@
                         <div class="percent">
                             10%
                         </div>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>

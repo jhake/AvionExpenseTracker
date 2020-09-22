@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 * {
+    font-family: 'Montserrat', sans-serif;
     box-sizing: border-box;
     padding: 0;
     margin: 0;
@@ -14,8 +17,11 @@
 }
 
 header {
-    background: grey;
-    height: 400px;
+    background: url("./header.PNG");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 300px;
+    color: white;
 }
 
 header .container {
@@ -24,11 +30,14 @@ header .container {
 }
 
 header h2 {
-    font-size: 20px;
+    font-size: 16px;
+    font-weight: 300;
 }
 
 header h1 {
-    font-size: 80px;
+    margin: 16px 0;
+    font-size: 40px;
+    font-weight: 700;
 }
 
 header h3 {
@@ -40,34 +49,74 @@ header .amount {
     text-align: right;
 }
 
+header .percent-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 20%
+}
+
 header .percent {
-    width: 20%;
     text-align: center;
+    font-size: 8px;
+    justify-self: flex-end;
 }
 
 #expenseDisplay, #incomeDisplay {
     display: flex;
     align-items: center;
-    padding: 8px 24px;
-    width: 80%;
+    height: 40px;
+    width: 70%;
+    padding: 16px 16px;
+    margin-top: 12px;
+}
+
+#expenseDisplay h3, #incomeDisplay h3 {
+    font-weight: 500;
+    font-size: 12px;
+    color: black;
 }
 
 #expenseDisplay {
-    background: red;
+    background: #F8504A;
 }
 
 #incomeDisplay {
-    background: green;
+    background: #32B9B5;
 }
 
+/*****************************************************************************************/
+
 #input {
-    background: blue;
-    height: 100px;
+    background: #F7F7F7;
+    height: 70px;
+    border-bottom: 1px solid rgb(200, 200, 200);
+    border-top: 1px solid rgb(200, 200, 200);
+}
+
+form {
+    width: 100%;
 }
 
 input, select, button{
+    border-radius: 5px;
     height: 50%;
-    margin: 0 4px;
+    margin: 0 8px;
+    border: 1px solid;
+}
+
+select {
+    width: 4%;
+}
+
+#inputDescription {
+    width: 40%;
+    padding: 2px 8px;
+}
+
+#inputAmount {
+    width: 20%;
+    padding: 2px 8px;
 }
 
 #inputForm {
@@ -77,21 +126,139 @@ input, select, button{
     height: 100%;
 }
 
+button {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button svg {
+    height: 15px;
+    width: 15px;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+button:hover svg {
+    fill: white;
+}
+
+.input-plus button:hover {
+    background: #32B9B5;
+}
+
+.input-minus button:hover {
+    background: #F8504A;
+}
+
+.input-plus input, .input-plus select, .input-plus button {
+    border-color: #32B9B5;
+    fill: #32B9B5;
+}
+
+.input-minus input, .input-minus select, .input-minus button {
+    border-color: #F8504A;
+    fill: #F8504A;
+}
+
+/*****************************************************************************************/
+
 #expenseIncome .container {
     height: 1000px;
+    padding-top: 40px;
+    justify-content: space-around;
 }
 
 #incomeContainer, #expenseContainer {
     height: 100%;
-    width: 50%;
+    width: 45%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 }
 
+#expenseIncome h2 {
+    border-bottom: 1px solid green;
+    padding-bottom: 16px;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+#incomeContainer h2, #incomeContainer .amount {
+    color: #32B9B5;
+}
+
+#expenseContainer h2, #expenseContainer .amount {
+    color: #F8504A;
+}
 
 li {
-    height: 50px;
+    height: 40px;
     display: flex;
     align-items: center;
+    border-bottom: 1px solid green;
+    padding: 0 8px;
+}
+
+li h3 {
+    width: 70%;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+li .amount {
+    width: 20%;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+
+li .percent-container {
+    width: 10%;
+    font-size: 8px;
+}
+
+.cross-button {
+    width: 20px;
+    height: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #F8504A;
+    border: 1px solid #F8504A;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+.cross-button.displayed {
+    display: flex;
+}
+
+.cross-button:hover {
+    background-color: #F8504A;
+    color: white;
+    cursor: pointer;
+}
+
+li .percent {
+    background: rgb(255, 183, 182);
+    color: #F8504A;
+    font-weight: 500;
+}
+
+.percent {
+    border-radius: 5px;
+    background: rgb(249,118,115);
+    height: 20px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

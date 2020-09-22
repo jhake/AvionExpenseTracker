@@ -1,9 +1,10 @@
 "use strict";
 
-const totalBudget = document.getElementById("totalBudget")
+const totalDisplay = document.getElementById("totalDisplay")
 const incomeDisplay = document.getElementById("incomeDisplay")
 const expenseDisplay = document.getElementById("expenseDisplay")
 
+const inputForm = document.getElementById("inputForm")
 const inputSelect = document.getElementById("inputSelect")
 const inputDescription = document.getElementById("inputDescription")
 const inputAmount = document.getElementById("inputAmount")
@@ -30,27 +31,39 @@ const Entry = function(description, amount) {
         let descriptionElement = document.createElement("h3")
         let amountElement = document.createElement("span")
         let crossButton = document.createElement("span")
+        let percentContainer = document.createElement("div")
         let percentElement = document.createElement("div")
 
+        percentContainer.className = "percent-container"
         amountElement.className = "amount"
         crossButton.className = "cross-button"
         percentElement.className = "percent"
 
-        descriptionElement.innerHTML = description
+        percentContainer.appendChild(percentElement)
+
+        descriptionElement.innerHTML = description.substring(0, 25)
+        if(description.length > 25){
+            descriptionElement.innerHTML += "..."
+        }
         amountElement.innerHTML = (amount >= 0)? "+" : ""
-        amountElement.innerHTML += amount
-        crossButton.innerHTML = "X"
+        amountElement.innerHTML += (formatter.format(amount))
+        crossButton.innerHTML = "×"
         crossButton.onclick = removeItem
 
         newLi.appendChild(descriptionElement)
         newLi.appendChild(amountElement)
+        if(amount < 0){
+            newLi.appendChild(percentContainer)
+        }
         newLi.appendChild(crossButton)
-        newLi.appendChild(percentElement)
         
         newLi.entry = this
 
         let parent = (amount >= 0)? incomeContainer : expenseContainer
         parent.appendChild(newLi)
+
+        newLi.onmouseover = onmouseoverHandler
+        newLi.onmouseleave = onmouseleaveHandler
 
         return newLi
     } ) ();
@@ -61,6 +74,14 @@ submit.onclick = function() {
     clearInput()
     addEntry(values)
     updateDisplays()
+}
+
+inputSelect.onchange = function() {
+    if(inputSelect.value === "+") {
+        inputForm.className = "input-plus"
+    } else {
+        inputForm.className = "input-minus"
+    }
 }
 
 const getInput = function() {
@@ -88,21 +109,19 @@ const addEntry = function(values) {
 }
 
 const updateDisplays = function() {
-    let totalIncome = 0
-    let totalExpense = 0
+    let totalIncome = getTotalIncome()
+    let totalExpense = getTotalExpense()
+    let totalBudget = totalIncome + totalExpense
 
-    entries.forEach( entry => {
-        if (entry.amount >= 0) {
-            totalIncome += entry.amount
-        } else {
-            totalExpense += entry.amount
-        }
-    })
+    incomeDisplay.querySelector("span").innerHTML = "+" + formatter.format(totalIncome)
+    expenseDisplay.querySelector("span").innerHTML = formatter.format(totalExpense)
 
-    incomeDisplay.querySelector("span").innerHTML = totalIncome
-    expenseDisplay.querySelector("span").innerHTML = totalExpense
-
-    totalBudget.innerHTML = totalIncome + totalExpense
+    if(totalBudget >= 0) {
+        totalDisplay.innerHTML = "+"
+    } else {
+        totalDisplay.innerHTML = ""
+    }
+    totalDisplay.innerHTML += formatter.format(totalBudget)
 
     entries.forEach( entry => {
         if (entry.amount < 0) {
@@ -110,7 +129,7 @@ const updateDisplays = function() {
         }
     })
 
-    expenseDisplay.querySelector(".percent").innerHTML = (totalExpense/totalIncome) * -100
+    expenseDisplay.querySelector(".percent").innerHTML = ((totalExpense/totalIncome) * -100).toFixed(2)
     expenseDisplay.querySelector(".percent").innerHTML += "%"
 
     console.log(entries)
@@ -129,12 +148,47 @@ const removeItem = function() {
     updateDisplays()
 }
 
+const getTotalIncome = function() {
+    let totalIncome = 0
+    entries.forEach( entry => {
+        if (entry.amount >= 0) {
+            totalIncome += entry.amount
+        }
+    })
+    return totalIncome
+}
+
+const getTotalExpense = function() {
+    let totalExpense = 0
+    entries.forEach( entry => {
+        if (entry.amount < 0) {
+            totalExpense += entry.amount
+        }
+    })
+    return totalExpense
+}
+
 const updatePercent = function() {
-    let totalIncome = Number(incomeDisplay.querySelector("span").innerHTML)
-    let expense = Number(this.querySelector(".amount").innerHTML)
+    let totalIncome = getTotalIncome()
+    let expense = this.entry.amount
 
     let percentElement = this.querySelector(".percent")
 
-    percentElement.innerHTML = (expense/totalIncome) * -100
+    percentElement.innerHTML = ((expense/totalIncome) * -100).toFixed(2)
     percentElement.innerHTML += "%"
 }
+
+const onmouseoverHandler = function() {
+    let crossButton = this.querySelector(".cross-button")
+    crossButton.classList.add("displayed")
+}
+
+const onmouseleaveHandler = function() {
+    let crossButton = this.querySelector(".cross-button")
+    crossButton.classList.remove("displayed")
+}
+
+var formatter = new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+})
