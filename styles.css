@@ -156,12 +156,14 @@ button:hover svg {
     background: #F8504A;
 }
 
-.input-plus input, .input-plus select, .input-plus button {
+.input-plus input:focus, .input-plus select:focus, .input-plus button {
+    outline: none;
     border-color: #32B9B5;
     fill: #32B9B5;
 }
 
-.input-minus input, .input-minus select, .input-minus button {
+.input-minus input:focus, .input-minus select:focus, .input-minus button {
+    outline: none;
     border-color: #F8504A;
     fill: #F8504A;
 }
