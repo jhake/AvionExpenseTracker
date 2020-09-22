@@ -137,9 +137,7 @@ const updateDisplays = function() {
         }
     })
 
-    expenseDisplay.querySelector(".percent").innerHTML = ((totalExpense/totalIncome) * -100).toFixed(2)
-    expenseDisplay.querySelector(".percent").innerHTML += "%"
-
+    expenseDisplay.querySelector(".percent").innerHTML = percentFormatter(-totalExpense/totalIncome)
     console.log(entries)
 }
 
@@ -182,8 +180,7 @@ const updatePercent = function() {
 
     let percentElement = this.querySelector(".percent")
 
-    percentElement.innerHTML = ((expense/totalIncome) * -100).toFixed(2)
-    percentElement.innerHTML += "%"
+    percentElement.innerHTML = percentFormatter(-expense/totalIncome)
 }
 
 const onmouseoverHandler = function() {
@@ -200,3 +197,11 @@ var formatter = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
 })
+
+const percentFormatter = function(value) {
+    if(value == Infinity || value == -Infinity || isNaN(value)) {
+        return ". . ."
+    } else {
+        return (value*100).toFixed(2) + "%"
+    }
+}
