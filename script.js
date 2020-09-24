@@ -19,6 +19,11 @@ window.onload = function() {
     // Example entries, as if loaded from database
     entries.push(new Entry("test income", 1000))
     entries.push(new Entry("test expense", -400))
+    entries.push(new Entry("test expense", -42400))
+    entries.push(new Entry("test expense", -45120))
+    entries.push(new Entry("test expense", -43.400))
+    entries.push(new Entry("test expense", -400))
+    entries.push(new Entry("test expense long long long description", -409879870))
     updateDisplays()
 }
 
@@ -36,25 +41,31 @@ const Entry = function(description, amount) {
 
         percentContainer.className = "percent-container"
         amountElement.className = "amount"
-        crossButton.className = "cross-button"
+        crossButton.className = "cross-button hidden"
         percentElement.className = "percent"
 
         percentContainer.appendChild(percentElement)
 
-        descriptionElement.innerHTML = description.substring(0, 25)
-        if(description.length > 25){
+        descriptionElement.innerHTML = description.substring(0, 30)
+        if(description.length > 30){
             descriptionElement.innerHTML += "..."
         }
-        amountElement.innerHTML = (amount >= 0)? "+" : ""
-        amountElement.innerHTML += (moneyFormatter(amount))
+        console.log(amount)
+        if(amount >= 1E6 || amount <= -1E6) {
+            amountElement.innerHTML += moneyFormatterShort(amount)
+        } else {
+            
+            amountElement.innerHTML += moneyFormatter(amount)
+        }
         crossButton.innerHTML = "×"
         crossButton.onclick = removeItem
 
         newLi.appendChild(descriptionElement)
         newLi.appendChild(amountElement)
-        if(amount < 0){
-            newLi.appendChild(percentContainer)
+        if(amount >= 0){
+            percentElement.classList.add("fake")
         }
+        newLi.appendChild(percentContainer)
         newLi.appendChild(crossButton)
         
         newLi.entry = this
@@ -62,8 +73,13 @@ const Entry = function(description, amount) {
         let parent = (amount >= 0)? incomeContainer : expenseContainer
         parent.appendChild(newLi)
 
-        newLi.onmouseover = onmouseoverHandler
-        newLi.onmouseleave = onmouseleaveHandler
+        if(amount >= 1E6 || amount <= -1E6) {
+            amountElement.onmouseover = onmouseoverAmtHandler
+            amountElement.onmouseleave = onmouseleaveAmtHandler
+        }
+
+        newLi.onmouseover = onmouseoverLiHandler
+        newLi.onmouseleave = onmouseleaveLiHandler
 
         return newLi
     } ) ();
@@ -121,15 +137,10 @@ const updateDisplays = function() {
     let totalExpense = getTotalExpense()
     let totalBudget = totalIncome + totalExpense
 
-    incomeDisplay.querySelector("span").innerHTML = "+" + moneyFormatter(totalIncome)
+    incomeDisplay.querySelector("span").innerHTML = moneyFormatter(totalIncome)
     expenseDisplay.querySelector("span").innerHTML = moneyFormatter(totalExpense)
 
-    if(totalBudget >= 0) {
-        totalDisplay.innerHTML = "+"
-    } else {
-        totalDisplay.innerHTML = ""
-    }
-    totalDisplay.innerHTML += moneyFormatter(totalBudget)
+    totalDisplay.innerHTML = moneyFormatter(totalBudget)
 
     entries.forEach( entry => {
         if (entry.amount < 0) {
@@ -183,20 +194,74 @@ const updatePercent = function() {
     percentElement.innerHTML = percentFormatter(-expense/totalIncome)
 }
 
-const onmouseoverHandler = function() {
+const onmouseoverLiHandler = function() {
     let crossButton = this.querySelector(".cross-button")
-    crossButton.classList.add("displayed")
+    crossButton.classList.remove("hidden")
 }
 
-const onmouseleaveHandler = function() {
-    let crossButton = this.querySelector(".cross-button")
-    crossButton.classList.remove("displayed")
+const onmouseleaveLiHandler = function() {
+    let crossButton = this.querySelector(".cross-button")    
+    crossButton.classList.add("hidden")
 }
 
-var moneyFormatter = new Intl.NumberFormat('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-}).format
+const onmouseoverAmtHandler = function() {
+    let descriptionElement = this.parentElement.querySelector("h3")
+
+    this.classList.add("expanded")
+    descriptionElement.classList.remove("expanded")
+    descriptionElement.classList.add("collapsed")
+
+    this.innerHTML = moneyFormatter(this.parentElement.entry.amount)
+}
+
+const onmouseleaveAmtHandler = function() {
+    let descriptionElement = this.parentElement.querySelector("h3")
+
+    this.classList.remove("expanded")
+    descriptionElement.classList.remove("collapsed")
+
+    this.innerHTML = moneyFormatterShort(this.parentElement.entry.amount)
+}
+
+var moneyFormatterShort = function(num) {
+    let absNum = Math.abs(num)
+    let si = [
+          { value: 1, symbol: "" },
+          { value: 1E3, symbol: "K" },
+          { value: 1E6, symbol: "M" },
+          { value: 1E9, symbol: "B" },
+          { value: 1E12, symbol: "T" },
+          { value: 1E15, symbol: "Q" },
+    ]
+    let i;
+    for (i = si.length - 1; i > 0; i--) {
+        if (absNum >= si[i].value) {
+            break;
+        }
+    }
+
+    let formattedString = (absNum / si[i].value).toFixed(2) + si[i].symbol;
+    if(num >= 0) {
+        formattedString = "+" + formattedString
+    } else {
+        formattedString = "-" + formattedString
+    }
+
+    return formattedString 
+}
+
+var moneyFormatter = function(num) {
+    let formattedString = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).format(num)
+
+    if(num >= 0) {
+        formattedString = "+" + formattedString
+    }
+
+    return formattedString
+}
 
 const percentFormatter = function(value) {
     if(value == Infinity || value == -Infinity || isNaN(value)) {

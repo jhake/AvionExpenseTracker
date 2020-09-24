@@ -43,7 +43,7 @@
                     <option value="-">-</option>
                 </select>
                 <input type="text" id="inputDescription" placeholder="Add Description" required>
-                <input type="number" id="inputAmount" placeholder="Amount" step="any" required>
+                <input type="number" id="inputAmount" placeholder="Amount" step="any" max="10E15" required>
                 <button id="submit">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
                 </button>
@@ -56,36 +56,11 @@
             <div id="incomeContainer">
                 <h2>INCOME</h2>
                 <ul>
-                    <!-- <li>
-                        <h3>
-                            Paycheck
-                        </h3>
-                        <span class="amount">
-                            1000
-                        </span>
-                        <span class="cross-button">
-                            X
-                        </span>
-                    </li> -->
                 </ul>
             </div>
             <div id="expenseContainer">
                 <h2>EXPENSES</h2>
                 <ul>
-                    <!-- <li>
-                        <h3>
-                            Rent
-                        </h3>
-                        <span class="amount">
-                            -10000
-                        </span>
-                        <span class="cross-button">
-                            X
-                        </span>
-                        <div class="percent">
-                            10%
-                        </div>
-                    </li> -->
                 </ul>
             </div>
         </div>

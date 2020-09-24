@@ -67,7 +67,7 @@ header .percent {
     display: flex;
     align-items: center;
     height: 40px;
-    width: 70%;
+    width: 80%;
     padding: 16px 16px;
     margin-top: 12px;
 }
@@ -173,6 +173,7 @@ button:hover svg {
 
 #expenseIncome .container {
     height: 1000px;
+    width: 1200px;
     padding-top: 40px;
     justify-content: space-around;
 }
@@ -204,6 +205,7 @@ li {
     height: 40px;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     border-bottom: 1px solid green;
     padding: 0 8px;
 }
@@ -212,17 +214,21 @@ li h3 {
     width: 70%;
     font-size: 15px;
     font-weight: 400;
+    white-space: nowrap;
+    transition: width 0.5s;
 }
 
 li .amount {
     width: 20%;
     font-size: 15px;
     font-weight: 700;
+    transition: width 0.5s;
+    text-align: center;
 }
 
 
 li .percent-container {
-    width: 10%;
+    width: 40px;
     font-size: 8px;
 }
 
@@ -237,11 +243,8 @@ li .percent-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    display: none;
-}
-
-.cross-button.displayed {
     display: flex;
+    margin-left: 8px;
 }
 
 .cross-button:hover {
@@ -253,7 +256,19 @@ li .percent-container {
 li .percent {
     background: rgb(255, 183, 182);
     color: #F8504A;
-    font-weight: 500;
+    font-weight: 800;
+}
+
+li .collapsed {
+    visibility: hidden;
+    width: 0%;
+    transition: width 0.5s;
+}
+
+li .expanded {
+    width: 90%;
+    text-align: center;
+    transition: width 0.5s;
 }
 
 .percent {
@@ -264,4 +279,12 @@ li .percent {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.hidden {
+    display: none;
+}
+
+li .fake {
+    background: rgba(0, 0, 0, 0);
 }
