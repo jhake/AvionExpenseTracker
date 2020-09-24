@@ -88,7 +88,7 @@ const Entry = function(description, amount) {
 inputForm.onsubmit = function() {
     let values = getInput()
     clearInput()
-    addEntry(values)
+    entries.push(new Entry(values.description, values.amount))
     updateDisplays()
 }
 
@@ -125,11 +125,6 @@ const getInput = function() {
 const clearInput = function() {
     inputDescription.value = ""
     inputAmount.value = ""
-}
-
-const addEntry = function(values) {
-    let newEntry = new Entry(values.description, values.amount)
-    entries.push(newEntry)
 }
 
 const updateDisplays = function() {
