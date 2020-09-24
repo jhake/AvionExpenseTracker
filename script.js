@@ -201,6 +201,8 @@ var moneyFormatter = new Intl.NumberFormat('en-US', {
 const percentFormatter = function(value) {
     if(value == Infinity || value == -Infinity || isNaN(value)) {
         return ". . ."
+    } else if (value >= 10) {
+        return ". . ."
     } else {
         return (value*100).toFixed(2) + "%"
     }
